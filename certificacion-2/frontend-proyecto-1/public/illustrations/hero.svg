@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" fill="none" role="img" aria-label="Libros, birrete y gráfica de notas">
+  <circle cx="240" cy="200" r="170" fill="#ffffff" fill-opacity=".10"/>
+  <circle cx="240" cy="200" r="120" fill="#ffffff" fill-opacity=".10"/>
+  <!-- libros -->
+  <rect x="110" y="250" width="260" height="34" rx="8" fill="#ffffff"/>
+  <rect x="126" y="256" width="228" height="6" rx="3" fill="#d6caff"/>
+  <rect x="130" y="214" width="220" height="34" rx="8" fill="#ffb938"/>
+  <rect x="146" y="220" width="188" height="6" rx="3" fill="#fff1d6"/>
+  <rect x="150" y="178" width="180" height="34" rx="8" fill="#b8a4ff"/>
+  <rect x="166" y="184" width="148" height="6" rx="3" fill="#ebe5ff"/>
+  <!-- birrete -->
+  <path d="M240 84 330 120 240 156 150 120Z" fill="#ffffff"/>
+  <path d="M190 138v34c0 12 22 22 50 22s50-10 50-22v-34l-50 20z" fill="#ebe5ff"/>
+  <path d="M330 120v44" stroke="#ffb938" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="330" cy="170" r="8" fill="#ffb938"/>
+  <!-- grafica -->
+  <rect x="62" y="96" width="14" height="40" rx="4" fill="#ffffff" fill-opacity=".55"/>
+  <rect x="84" y="76" width="14" height="60" rx="4" fill="#ffffff" fill-opacity=".8"/>
+  <rect x="106" y="56" width="14" height="80" rx="4" fill="#ffffff"/>
+  <!-- estrellas -->
+  <path d="m400 84 6 14 15 2-11 10 3 15-13-8-13 8 3-15-11-10 15-2z" fill="#ffb938"/>
+  <path d="m76 300 4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z" fill="#ffffff"/>
+</svg>

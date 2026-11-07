@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flowly — Organiza tu equipo sin esfuerzo</title>
+<meta name="description" content="Flowly es la plataforma de gestión de tareas que mantiene a tu equipo alineado, enfocado y a tiempo." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="noise-overlay" aria-hidden="true"></div>
+
+<header class="site-header" id="header">
+  <div class="container header-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark"></span>
+      Flowly
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="#features">Funciones</a>
+      <a href="#how">Cómo funciona</a>
+      <a href="#pricing">Precios</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="#" class="btn btn-ghost">Iniciar sesión</a>
+      <a href="#pricing" class="btn btn-primary">Empezar gratis</a>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-inner">
+      <div class="badge reveal">
+        <span class="dot"></span>
+        Nuevo: automatizaciones con IA
+      </div>
+
+      <h1 class="reveal">
+        El trabajo en equipo,
+        <span class="gradient-text">por fin en orden</span>
+      </h1>
+
+      <p class="hero-sub reveal">
+        Flowly centraliza tareas, plazos y conversaciones en un solo lugar
+        para que tu equipo deje de perder tiempo buscando información
+        y empiece a avanzar de verdad.
+      </p>
+
+      <div class="hero-cta reveal">
+        <a href="#pricing" class="btn btn-primary btn-lg">Empezar gratis</a>
+        <a href="#how" class="btn btn-outline btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="currentColor"/></svg>
+          Ver demo
+        </a>
+      </div>
+
+      <p class="hero-note reveal">Sin tarjeta de crédito · Cancela cuando quieras</p>
+
+      <div class="hero-visual reveal">
+        <div class="dashboard-mock">
+          <div class="mock-topbar">
+            <span class="mock-dot red"></span>
+            <span class="mock-dot yellow"></span>
+            <span class="mock-dot green"></span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-sidebar">
+              <div class="mock-line w60"></div>
+              <div class="mock-line w40"></div>
+              <div class="mock-line w50"></div>
+              <div class="mock-line w30"></div>
+            </div>
+            <div class="mock-main">
+              <div class="mock-card">
+                <div class="mock-card-header">
+                  <div class="mock-line w40"></div>
+                  <span class="mock-pill">En progreso</span>
+                </div>
+                <div class="mock-line w80"></div>
+                <div class="mock-line w60"></div>
+              </div>
+              <div class="mock-card">
+                <div class="mock-card-header">
+                  <div class="mock-line w40"></div>
+                  <span class="mock-pill pill-green">Completado</span>
+                </div>
+                <div class="mock-line w70"></div>
+                <div class="mock-line w50"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <section class="logos">
+    <div class="container">
+      <p class="logos-label">Equipos que ya confían en Flowly</p>
+      <div class="logos-row">
+        <span>NORTE</span>
+        <span>VELA</span>
+        <span>ORBITA</span>
+        <span>PIXELIA</span>
+        <span>ANDINA</span>
+        <span>KAIROS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Funciones</span>
+        <h2>Todo lo que tu equipo necesita, nada de lo que no</h2>
+        <p>Diseñado para reducir el ruido y dejar espacio para lo importante: hacer el trabajo.</p>
+      </div>
+
+      <div class="features-grid">
+        <article class="feature-card reveal">
+          <div class="feature-icon icon-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4M2 12l3 3L21 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Tareas y proyectos</h3>
+          <p>Organiza tu trabajo en tableros flexibles que se adaptan al flujo de tu equipo, no al revés.</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Automatizaciones con IA</h3>
+          <p>Deja que Flowly asigne tareas, resuma avances y detecte cuellos de botella por ti.</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon icon-green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Seguimiento en tiempo real</h3>
+          <p>Visualiza el progreso del equipo al instante, sin reuniones de estado innecesarias.</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon icon-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Chat integrado</h3>
+          <p>Comenta directamente sobre cada tarea. Nada se pierde entre correos y capturas de pantalla.</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon icon-pink">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Calendario unificado</h3>
+          <p>Visualiza plazos, hitos y reuniones de todos tus proyectos en una sola vista.</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <div class="feature-icon icon-teal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Integraciones</h3>
+          <p>Conecta Flowly con las herramientas que ya usas: Slack, GitHub, Google Drive y más.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>De la idea a la entrega, en tres pasos</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-number">01</div>
+          <h3>Crea tu espacio</h3>
+          <p>Configura tu equipo y proyectos en minutos, sin fricción ni configuraciones complejas.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-number">02</div>
+          <h3>Organiza el trabajo</h3>
+          <p>Agrega tareas, asigna responsables y define plazos con una interfaz simple e intuitiva.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-number">03</div>
+          <h3>Entrega con confianza</h3>
+          <p>Sigue el avance en tiempo real y celebra cada hito cumplido junto a tu equipo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="container stats-grid">
+      <div class="stat reveal">
+        <span class="stat-number" data-count="12000">0</span>
+        <span class="stat-label">Equipos activos</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat-number" data-count="98">0</span>
+        <span class="stat-suffix">%</span>
+        <span class="stat-label">Satisfacción</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat-number" data-count="4">0</span>
+        <span class="stat-suffix">M+</span>
+        <span class="stat-label">Tareas completadas</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat-number" data-count="35">0</span>
+        <span class="stat-label">Horas ahorradas/mes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Testimonios</span>
+        <h2>Equipos que trabajan mejor con Flowly</h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <article class="testimonial-card reveal">
+          <p>"Redujimos nuestras reuniones de seguimiento a la mitad. Todo el equipo sabe en qué está cada quién."</p>
+          <div class="testimonial-author">
+            <div class="avatar">MG</div>
+            <div>
+              <strong>María González</strong>
+              <span>Product Lead, Vela</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="testimonial-card reveal">
+          <p>"La automatización con IA nos ahorra horas cada semana. Es como tener un asistente extra en el equipo."</p>
+          <div class="testimonial-author">
+            <div class="avatar">JR</div>
+            <div>
+              <strong>Jorge Ramírez</strong>
+              <span>CTO, Órbita</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="testimonial-card reveal">
+          <p>"Migramos desde tres herramientas distintas a solo Flowly. La adopción del equipo fue inmediata."</p>
+          <div class="testimonial-author">
+            <div class="avatar">LC</div>
+            <div>
+              <strong>Lucía Castro</strong>
+              <span>Operaciones, Pixelia</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Precios</span>
+        <h2>Planes simples, sin sorpresas</h2>
+        <p>Empieza gratis y crece a tu ritmo. Cambia o cancela cuando quieras.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <article class="price-card reveal">
+          <h3>Starter</h3>
+          <p class="price-desc">Para equipos pequeños que están empezando.</p>
+          <div class="price"><span class="price-amount">$0</span><span class="price-period">/mes</span></div>
+          <ul class="price-features">
+            <li>Hasta 5 miembros</li>
+            <li>3 proyectos activos</li>
+            <li>Tareas y tableros básicos</li>
+            <li>Soporte por comunidad</li>
+          </ul>
+          <a href="#" class="btn btn-outline btn-block">Empezar gratis</a>
+        </article>
+
+        <article class="price-card featured reveal">
+          <span class="price-badge">Más popular</span>
+          <h3>Pro</h3>
+          <p class="price-desc">Para equipos que necesitan escalar sin fricción.</p>
+          <div class="price"><span class="price-amount">$12</span><span class="price-period">/usuario/mes</span></div>
+          <ul class="price-features">
+            <li>Miembros ilimitados</li>
+            <li>Proyectos ilimitados</li>
+            <li>Automatizaciones con IA</li>
+            <li>Integraciones avanzadas</li>
+            <li>Soporte prioritario</li>
+          </ul>
+          <a href="#" class="btn btn-primary btn-block">Probar 14 días gratis</a>
+        </article>
+
+        <article class="price-card reveal">
+          <h3>Enterprise</h3>
+          <p class="price-desc">Para organizaciones con necesidades avanzadas.</p>
+          <div class="price"><span class="price-amount">A medida</span></div>
+          <ul class="price-features">
+            <li>Todo lo de Pro</li>
+            <li>SSO y controles de seguridad</li>
+            <li>SLA dedicado</li>
+            <li>Onboarding personalizado</li>
+          </ul>
+          <a href="#" class="btn btn-outline btn-block">Contactar ventas</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>¿Tienes dudas? Aquí tienes respuestas</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            ¿Necesito tarjeta de crédito para el plan gratuito?
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>No. El plan Starter es completamente gratuito y no requiere ningún método de pago para empezar a usarlo.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            ¿Puedo cambiar de plan en cualquier momento?
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Sí, puedes subir o bajar de plan cuando quieras desde la configuración de tu cuenta, sin penalizaciones.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            ¿Flowly funciona para equipos remotos?
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Totalmente. Fue diseñado pensando en equipos distribuidos, con actualizaciones en tiempo real y notificaciones inteligentes.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            ¿Qué integraciones ofrece Flowly?
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Se integra con Slack, GitHub, Google Drive, Notion y muchas más herramientas populares.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-final">
+    <div class="container">
+      <div class="cta-box reveal">
+        <h2>Empieza a ordenar el trabajo de tu equipo hoy</h2>
+        <p>Únete a miles de equipos que ya organizan su trabajo con Flowly.</p>
+        <a href="#pricing" class="btn btn-primary btn-lg">Empezar gratis</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <span class="logo-mark"></span>
+        Flowly
+      </a>
+      <p>La forma más simple de mantener a tu equipo enfocado y a tiempo.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Producto</h4>
+      <a href="#features">Funciones</a>
+      <a href="#pricing">Precios</a>
+      <a href="#faq">FAQ</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Compañía</h4>
+      <a href="#">Sobre nosotros</a>
+      <a href="#">Blog</a>
+      <a href="#">Carreras</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Privacidad</a>
+      <a href="#">Términos</a>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>© 2026 Flowly. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Volver arriba">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>

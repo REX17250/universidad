@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organizador de Tareas UPB</title>
+  <link rel="stylesheet" href="/estilos.css">
+</head>
+<body>
+  <header class="cabecera">
+    <h1>Organizador de Tareas UPB</h1>
+  </header>
+
+  <div id="mensajes" class="mensajes" aria-live="polite"></div>
+
+  <main class="contenido">
+    <section id="seccion-materias" aria-labelledby="titulo-materias">
+      <h2 id="titulo-materias">Materias</h2>
+
+      <div id="bienvenida" class="bienvenida" hidden>
+        <p><strong>¡Bienvenido al Organizador de Tareas UPB!</strong></p>
+        <ol>
+          <li>Registra tu primera materia con un nombre y un color.</li>
+          <li>Luego crea tu primera tarea con su fecha de entrega.</li>
+        </ol>
+      </div>
+
+      <form id="form-materia" class="formulario" novalidate>
+        <div class="campo">
+          <label for="materia-nombre">Nombre de la materia</label>
+          <input id="materia-nombre" name="nombre" type="text" autocomplete="off" required>
+        </div>
+
+        <fieldset class="selector-color">
+          <legend>Color</legend>
+          <div id="opciones-color" class="opciones-color"></div>
+        </fieldset>
+
+        <button type="submit" class="boton-primario">Guardar materia</button>
+      </form>
+
+      <ul id="lista-materias" class="lista-materias" aria-label="Materias registradas"></ul>
+    </section>
+
+    <section id="seccion-nueva-tarea" aria-labelledby="titulo-nueva-tarea">
+      <h2 id="titulo-nueva-tarea">Nueva tarea</h2>
+    </section>
+
+    <section id="seccion-filtros" aria-labelledby="titulo-filtros">
+      <h2 id="titulo-filtros">Filtros</h2>
+    </section>
+
+    <section id="seccion-tareas" aria-labelledby="titulo-tareas">
+      <h2 id="titulo-tareas">Tareas</h2>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

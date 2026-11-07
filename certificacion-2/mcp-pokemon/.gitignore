@@ -1,0 +1,18 @@
+﻿node_modules/
+dist/
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local teaching notes and MCP client configs kept on the instructor machine
+README.md
+MCP_EXPLICACION.md
+POKEMON_MCP.md
+.mcp.json
+opencode.jsonc
+.codex/
+package-lock.json

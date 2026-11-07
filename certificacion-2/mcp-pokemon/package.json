@@ -1,0 +1,26 @@
+{
+  "name": "mcp-pokemon",
+  "version": "1.0.0",
+  "description": "MCP server for consuming PokeAPI v2 with cached, typed Pokemon tools.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsx src/main.ts",
+    "start": "node dist/main.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "inspect": "npx -y @modelcontextprotocol/inspector npx -y tsx src/main.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.1.0",
+    "tsx": "^4.23.15",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

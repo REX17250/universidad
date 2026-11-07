@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local MCP client config kept per machine
+.mcp.json
+opencode.jsonc
+.codex/

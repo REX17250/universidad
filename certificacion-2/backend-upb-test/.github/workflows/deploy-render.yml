@@ -1,0 +1,43 @@
+name: Deploy a Render
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Un solo despliegue a la vez: si llega otro push, espera al anterior en vez de solaparse
+concurrency:
+  group: deploy-render
+  cancel-in-progress: false
+
+jobs:
+  verificar:
+    name: Verificar código
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+      - name: Revisar que todos los archivos compilan
+        run: find src -name '*.js' -print0 | xargs -0 -n1 node --check
+
+  deploy:
+    name: Desplegar en Render
+    needs: verificar
+    runs-on: ubuntu-latest
+    environment: prueba
+    steps:
+      - name: Disparar el despliegue en Render
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::error::Falta el secreto RENDER_DEPLOY_HOOK_URL en el entorno 'prueba'."
+            exit 1
+          fi
+          curl --fail-with-body -sS -X POST "$RENDER_DEPLOY_HOOK_URL"
+          echo
+          echo "Despliegue solicitado a Render."

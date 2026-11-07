@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Memoria Virtual</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #3bc8eb, #006c74, #000000);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1100px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        h2 {
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select, button {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        .btn-warning:hover {
+            background: #d35400;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .memory-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .memory-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .memory-panel {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .memory-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-size: 1.4rem;
+        }
+        
+        .memory-visualization {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            min-height: 150px;
+        }
+        
+        .memory-block {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .memory-block:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        .memory-block.empty {
+            background: #bdc3c7;
+            color: #7f8c8d;
+        }
+        
+        .process-list {
+            margin-top: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        th {
+            background: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+        
+        .log {
+            height: 200px;
+            overflow-y: auto;
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            margin-top: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .log-entry.info {
+            color: #3498db;
+        }
+        
+        .log-entry.warning {
+            color: #f39c12;
+        }
+        
+        .log-entry.error {
+            color: #e74c3c;
+        }
+        
+        .log-entry.success {
+            color: #2ecc71;
+        }
+        
+        .algorithm-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .algo-btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .algo-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .algo-btn:hover:not(.active) {
+            background: #d0d0d0;
+        }
+
+        .algo-btn.disabled-algo-btn {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .highlight {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Simulador de Memoria Virtual</h1>
+            <p class="subtitle">Simulación de algoritmos de reemplazo de páginas LRU (Least Recently Used) y LFU (Least Frequently Used) en sistemas de memoria virtual</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Configuración del Sistema</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="memoriaPrincipal">Tamaño Memoria Principal (KB)</label>
+                    <input type="number" id="memoriaPrincipal" min="16" step="16" value="64">
+                </div>
+                
+                <div class="form-group">
+                    <label for="memoriaSecundaria">Tamaño Memoria Secundaria (KB)</label>
+                    <input type="number" id="memoriaSecundaria" min="16" step="16" value="128">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tamanoPagina">Tamaño de Página (KB)</label>
+                    <input type="number" id="tamanoPagina" min="2" step="2" value="4">
+                </div>
+                
+                <div class="algorithm-selector">
+                    <div class="algo-btn active" id="btnLRU">Algoritmo LRU</div>
+                    <div class="algo-btn" id="btnLFU">Algoritmo LFU</div>
+                </div>
+                
+                <button id="btnIniciar" class="btn-success">Iniciar Sistema</button>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Gestión de Procesos</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nombreProceso">Nombre del Proceso</label>
+                    <input type="text" id="nombreProceso" placeholder="Ej: Proceso1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tamanoProceso">Tamaño del Proceso (KB)</label>
+                    <input type="number" id="tamanoProceso" min="1" value="8">
+                </div>
+                
+                <button id="btnCrearProceso" class="btn-success" disabled>Crear Proceso</button>
+                
+                <button id="btnGenerarProcesoAleatorio" class="btn-warning" disabled style="margin-top: 10px;">Generar Proceso Aleatorio</button>
+
+                <div class="form-group" style="margin-top: 25px;">
+                    <label>Simular Acceso Aleatorio</label>
+                    <button id="btnAccesoAleatorio" class="btn-warning" disabled>Simular Acceso</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel" style="grid-column: span 2;">
+            <div class="panel-header">
+                <h2>Simulación Comparativa de Algoritmos</h2>
+            </div>
+            <div class="form-group">
+                <label for="numProcesosAleatorios">Número de Procesos Aleatorios a Generar</label>
+                <input type="number" id="numProcesosAleatorios" min="1" value="5">
+            </div>
+            <button id="btnSimularAleatorio" class="btn-warning" disabled>Simular Aleatorio y Comparar</button>
+        </div>
+        
+        <div class="memory-container">
+            <div class="memory-panel">
+                <h3 class="memory-title">Memoria Principal</h3>
+                <div id="visualizacionMemoriaPrincipal" class="memory-visualization"></div>
+            </div>
+            
+            <div class="memory-panel">
+                <h3 class="memory-title">Memoria Secundaria</h3>
+                <div id="visualizacionMemoriaSecundaria" class="memory-visualization"></div>
+            </div>
+        </div>
+        
+        <div class="panel process-list">
+            <div class="panel-header">
+                <h2>Procesos Activos</h2>
+            </div>
+            <table id="tablaProcesos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tamaño (KB)</th>
+                        <th>Páginas</th>
+                        <th>Estado</th>
+                        <th>Accesos</th>
+                        <th>Último Acceso</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label ">Marcos MP Libres</div>
+                <div class="stat-value" id="statMarcosMPLibres">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Bloques MS Libres</div>
+                <div class="stat-value" id="statBloquesMSLibres">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Fallos de Página</div>
+                <div class="stat-value" id="statFallosPagina">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Aciertos de Página</div>
+                <div class="stat-value" id="statAciertosPagina">0</div>
+            </div>
+        </div>
+        
+        <br>
+
+        <div class="panel" style="grid-column: span 2;">
+            <div class="panel-header">
+                <h2>Registro de Simulaciones</h2>
+            </div>
+            <div id="registroEventos" class="log"></div>
+        </div>
+
+        <div class="panel process-list" style="margin-top: 30px;">
+            <div class="panel-header">
+                <h2>Resultados de Simulación</h2>
+            </div>
+            <div id="resultadosComparativos" style="display: none;">
+                <h3 style="margin-top: 20px;">Resultados LRU</h3>
+                <table id="tablaResultadosLRU">
+                    <thead>
+                        <tr>
+                            <th>Proceso</th>
+                            <th>Páginas en MP (Final)</th>
+                            <th>Accesos</th>
+                            <th>Fallos de Página</th>
+                            <th>Aciertos de Página</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <h3 style="margin-top: 20px;">Resultados LFU</h3>
+                <table id="tablaResultadosLFU">
+                    <thead>
+                        <tr>
+                            <th>Proceso</th>
+                            <th>Páginas en MP (Final)</th>
+                            <th>Accesos</th>
+                            <th>Fallos de Página</th>
+                            <th>Aciertos de Página</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let memoriaPrincipal = [];
+        let memoriaSecundaria = [];
+        let procesos = [];
+        let nextProcessId = 1;
+        let nextRandomProcessId = 1;
+        let tamanoPaginaKB = 0;
+        let marcosMemoriaPrincipal = 0;
+        let bloquesMemoriaSecundaria = 0;
+        let sistemaIniciado = false;
+        let algoritmoActual = 'LRU';
+        let fallosPagina = 0;
+        let aciertosPagina = 0;
+        let tiempoGlobal = 0;
+
+        let datosSimulacionAleatoria = null;
+
+        const btnIniciar = document.getElementById('btnIniciar');
+        const btnCrearProceso = document.getElementById('btnCrearProceso');
+        const btnGenerarProcesoAleatorio = document.getElementById('btnGenerarProcesoAleatorio');
+        const btnAccesoAleatorio = document.getElementById('btnAccesoAleatorio');
+        const registroEventos = document.getElementById('registroEventos');
+        const btnLRU = document.getElementById('btnLRU');
+        const btnLFU = document.getElementById('btnLFU');
+        const btnSimularAleatorio = document.getElementById('btnSimularAleatorio');
+        const resultadosComparativosDiv = document.getElementById('resultadosComparativos');
+        const mensajeNoResultadosP = document.getElementById('mensajeNoResultados');
+
+        btnIniciar.addEventListener('click', iniciarSistema);
+        btnCrearProceso.addEventListener('click', crearProceso);
+        btnGenerarProcesoAleatorio.addEventListener('click', generarProcesoAleatorio);
+        btnAccesoAleatorio.addEventListener('click', simularAccesoAleatorio);
+        btnLRU.addEventListener('click', () => seleccionarAlgoritmo('LRU'));
+        btnLFU.addEventListener('click', () => seleccionarAlgoritmo('LFU'));
+        btnSimularAleatorio.addEventListener('click', simularAleatorioYComparar);
+
+        function iniciarSistema() {
+            const tamanoMemoriaPrincipal = parseInt(document.getElementById('memoriaPrincipal').value);
+            const tamanoMemoriaSecundaria = parseInt(document.getElementById('memoriaSecundaria').value);
+            tamanoPaginaKB = parseInt(document.getElementById('tamanoPagina').value);
+
+            if (isNaN(tamanoMemoriaPrincipal) || tamanoMemoriaPrincipal <= 0 ||
+                isNaN(tamanoMemoriaSecundaria) || tamanoMemoriaSecundaria <= 0 ||
+                isNaN(tamanoPaginaKB) || tamanoPaginaKB <= 0) {
+                agregarLog('Todos los tamaños deben ser números positivos.', 'error');
+                return;
+            }
+
+            if (tamanoMemoriaPrincipal % tamanoPaginaKB !== 0) {
+                agregarLog('El tamaño de la memoria principal debe ser múltiplo del tamaño de página', 'error');
+                return;
+            }
+
+            if (tamanoMemoriaSecundaria % tamanoPaginaKB !== 0) {
+                agregarLog('El tamaño de la memoria secundaria debe ser múltiplo del tamaño de página', 'error');
+                return;
+            }
+
+            marcosMemoriaPrincipal = tamanoMemoriaPrincipal / tamanoPaginaKB;
+            bloquesMemoriaSecundaria = tamanoMemoriaSecundaria / tamanoPaginaKB;
+
+            memoriaPrincipal = Array(marcosMemoriaPrincipal).fill(null);
+            memoriaSecundaria = Array(bloquesMemoriaSecundaria).fill(null);
+
+            procesos = [];
+            nextProcessId = 1;
+            nextRandomProcessId = 1;
+            fallosPagina = 0;
+            aciertosPagina = 0;
+            tiempoGlobal = 0;
+
+            actualizarVisualizacionMemoria();
+            actualizarTablaProcesos();
+            actualizarEstadisticas();
+
+            btnCrearProceso.disabled = false;
+            btnGenerarProcesoAleatorio.disabled = false;
+            btnAccesoAleatorio.disabled = false;
+            btnSimularAleatorio.disabled = false;
+            btnIniciar.disabled = true;
+            document.getElementById('memoriaPrincipal').disabled = true;
+            document.getElementById('memoriaSecundaria').disabled = true;
+            document.getElementById('tamanoPagina').disabled = true;
+            btnLRU.classList.add('disabled-algo-btn');
+            btnLFU.classList.add('disabled-algo-btn');
+
+
+            sistemaIniciado = true;
+
+            agregarLog(`Sistema iniciado con éxito. Memoria Principal: ${marcosMemoriaPrincipal} marcos, Memoria Secundaria: ${bloquesMemoriaSecundaria} bloques. Algoritmo: ${algoritmoActual}`, 'success');
+        }
+
+        function seleccionarAlgoritmo(algoritmo) {
+            if (sistemaIniciado) {
+                agregarLog('No se puede cambiar el algoritmo con el sistema ya iniciado.', 'warning');
+                return;
+            }
+            algoritmoActual = algoritmo;
+            btnLRU.classList.remove('active');
+            btnLFU.classList.remove('active');
+            document.getElementById(`btn${algoritmo}`).classList.add('active');
+            agregarLog(`Algoritmo de reemplazo seleccionado: ${algoritmoActual}`, 'info');
+        }
+
+        function crearProceso(nombreProcesoManual, tamanoProcesoManual) {
+            if (!sistemaIniciado) {
+                agregarLog('El sistema no ha sido iniciado', 'error');
+                return;
+            }
+
+            const nombre = nombreProcesoManual || document.getElementById('nombreProceso').value.trim();
+            const tamanoKB = tamanoProcesoManual || parseInt(document.getElementById('tamanoProceso').value);
+
+            if (!nombre) {
+                agregarLog('Debe ingresar un nombre para el proceso', 'error');
+                return;
+            }
+
+            if (isNaN(tamanoKB) || tamanoKB <= 0) {
+                agregarLog('El tamaño del proceso debe ser un número positivo', 'error');
+                return;
+            }
+
+            const paginasNecesarias = Math.ceil(tamanoKB / tamanoPaginaKB);
+
+            const marcosLibresMP = memoriaPrincipal.filter(m => m === null).length;
+            const bloquesLibresMS = memoriaSecundaria.filter(b => b === null).length;
+
+            if (paginasNecesarias > (marcosLibresMP + bloquesLibresMS)) {
+                agregarLog(`No hay suficiente espacio total (MP + MS) para el proceso ${nombre} (requiere ${paginasNecesarias} páginas)`, 'error');
+                return;
+            }
+
+            const proceso = {
+                id: nextProcessId++,
+                nombre: nombre,
+                tamanoKB: tamanoKB,
+                paginas: paginasNecesarias,
+                estado: 'Nuevo',
+                accesos: 0,
+                ultimoAcceso: 0,
+                tablaPaginas: Array(paginasNecesarias).fill().map((_, i) => ({
+                    idProceso: nextProcessId - 1,
+                    nombreProceso: nombre,
+                    idPagina: i,
+                    enMemoriaPrincipal: false,
+                    marco: null,
+                    bloque: null,
+                    accesos: 0,
+                    ultimoAcceso: 0
+                }))
+            };
+
+            let paginasAsignadas = 0;
+            let paginasEnPrincipal = 0;
+
+            for (let i = 0; i < proceso.tablaPaginas.length; i++) {
+                const marcoLibre = memoriaPrincipal.indexOf(null);
+
+                if (marcoLibre !== -1) {
+                    memoriaPrincipal[marcoLibre] = {
+                        idProceso: proceso.id,
+                        nombreProceso: proceso.nombre,
+                        idPagina: i,
+                        accesos: 0,
+                        ultimoAcceso: 0
+                    };
+
+                    proceso.tablaPaginas[i].enMemoriaPrincipal = true;
+                    proceso.tablaPaginas[i].marco = marcoLibre;
+                    paginasEnPrincipal++;
+                    paginasAsignadas++;
+                } else {
+                    const bloqueLibre = memoriaSecundaria.indexOf(null);
+
+                    if (bloqueLibre !== -1) {
+                        memoriaSecundaria[bloqueLibre] = {
+                            idProceso: proceso.id,
+                            nombreProceso: proceso.nombre,
+                            idPagina: i
+                        };
+
+                        proceso.tablaPaginas[i].bloque = bloqueLibre;
+                        paginasAsignadas++;
+                    } else {
+                        agregarLog(`Advertencia: No se pudo asignar todas las páginas del proceso ${proceso.nombre} debido a fragmentación o falta de espacio contiguo.`, 'warning');
+                        break;
+                    }
+                }
+            }
+
+            if (paginasAsignadas < proceso.paginas) {
+                for (let i = 0; i < proceso.tablaPaginas.length; i++) {
+                    if (proceso.tablaPaginas[i].enMemoriaPrincipal) {
+                        memoriaPrincipal[proceso.tablaPaginas[i].marco] = null;
+                    } else if (proceso.tablaPaginas[i].bloque !== null) {
+                        memoriaSecundaria[proceso.tablaPaginas[i].bloque] = null;
+                    }
+                }
+                agregarLog(`No hay suficiente espacio contiguo o fragmentación para el proceso ${proceso.nombre} (requiere ${proceso.paginas} páginas, asignadas ${paginasAsignadas})`, 'error');
+                return;
+            }
+
+
+            if (paginasEnPrincipal >= Math.ceil(proceso.paginas / 2)) {
+                proceso.estado = 'Activo';
+            } else if (paginasEnPrincipal > 0) {
+                proceso.estado = 'Listo';
+            } else {
+                proceso.estado = 'Suspendido/Listo';
+            }
+
+            procesos.push(proceso);
+
+            actualizarVisualizacionMemoria();
+            actualizarTablaProcesos();
+            actualizarEstadisticas();
+
+            if (!nombreProcesoManual) {
+                document.getElementById('nombreProceso').value = '';
+                document.getElementById('tamanoProceso').value = '8';
+            }
+
+            agregarLog(`Proceso ${proceso.nombre} (ID: ${proceso.id}) creado con éxito. Páginas: ${paginasEnPrincipal} en principal, ${paginasAsignadas - paginasEnPrincipal} en secundaria`, 'success');
+        }
+
+        function generarProcesoAleatorio() {
+            if (!sistemaIniciado) {
+                agregarLog('El sistema no ha sido iniciado.', 'error');
+                return;
+            }
+
+            const nombreAleatorio = `Proceso_Rand_${nextRandomProcessId++}`;
+            const minTamano = 1;
+            const maxTamano = 64;
+            let tamanoAleatorio = Math.floor(Math.random() * (maxTamano - minTamano + 1)) + minTamano;
+            
+            if (tamanoPaginaKB > 0) {
+                tamanoAleatorio = Math.max(minTamano, Math.ceil(tamanoAleatorio / tamanoPaginaKB) * tamanoPaginaKB);
+            }
+
+            crearProceso(nombreAleatorio, tamanoAleatorio);
+        }
+
+
+        function simularAccesoAleatorio() {
+            if (!sistemaIniciado || procesos.length === 0) {
+                agregarLog('No hay procesos para simular acceso o el sistema no está iniciado.', 'warning');
+                return;
+            }
+
+            const procesoAleatorio = procesos[Math.floor(Math.random() * procesos.length)];
+            if (procesoAleatorio.estado === 'Eliminado') {
+                agregarLog(`El proceso ${procesoAleatorio.nombre} (ID: ${procesoAleatorio.id}) está eliminado, no se puede acceder.`, 'warning');
+                return;
+            }
+
+            const paginaAleatoriaIndex = Math.floor(Math.random() * procesoAleatorio.tablaPaginas.length);
+            const paginaAccedida = procesoAleatorio.tablaPaginas[paginaAleatoriaIndex];
+
+            tiempoGlobal++;
+
+            procesoAleatorio.accesos++;
+            procesoAleatorio.ultimoAcceso = tiempoGlobal;
+            paginaAccedida.accesos++;
+            paginaAccedida.ultimoAcceso = tiempoGlobal;
+
+            agregarLog(`Acceso simulado: Proceso ${procesoAleatorio.nombre} (ID: ${procesoAleatorio.id}), Página ${paginaAccedida.idPagina}`, 'info');
+
+            if (paginaAccedida.enMemoriaPrincipal) {
+                aciertosPagina++;
+                agregarLog(`Página ${paginaAccedida.idPagina} de ${procesoAleatorio.nombre} ya está en Memoria Principal (Acierto).`, 'success');
+                const marcoEnMP = memoriaPrincipal[paginaAccedida.marco];
+                if (marcoEnMP) {
+                    marcoEnMP.ultimoAcceso = tiempoGlobal;
+                    marcoEnMP.accesos++;
+                }
+            } else {
+                fallosPagina++;
+                agregarLog(`Página ${paginaAccedida.idPagina} de ${procesoAleatorio.nombre} no está en Memoria Principal (Fallo de Página).`, 'danger');
+
+                let marcoLibre = memoriaPrincipal.indexOf(null);
+
+                if (marcoLibre !== -1) {
+                    moverPaginaAMemoriaPrincipal(paginaAccedida, marcoLibre);
+                    agregarLog(`Página ${paginaAccedida.idPagina} de ${procesoAleatorio.nombre} movida a marco ${marcoLibre} de MP.`, 'info');
+                } else {
+                    agregarLog(`Memoria Principal llena. Aplicando algoritmo ${algoritmoActual} para reemplazo.`, 'warning');
+                    reemplazarPagina(paginaAccedida);
+                }
+            }
+            actualizarUICompleta();
+        }
+
+        function moverPaginaAMemoriaPrincipal(paginaAccedida, marcoDestino) {
+            if (paginaAccedida.bloque !== null) {
+                memoriaSecundaria[paginaAccedida.bloque] = null;
+                paginaAccedida.bloque = null;
+            }
+
+            memoriaPrincipal[marcoDestino] = {
+                idProceso: paginaAccedida.idProceso,
+                nombreProceso: paginaAccedida.nombreProceso,
+                idPagina: paginaAccedida.idPagina,
+                accesos: paginaAccedida.accesos,
+                ultimoAcceso: tiempoGlobal
+            };
+
+            paginaAccedida.enMemoriaPrincipal = true;
+            paginaAccedida.marco = marcoDestino;
+        }
+
+        function reemplazarPagina(paginaNueva) {
+            let paginaAReemplazar = null;
+            let indiceMarcoAReemplazar = -1;
+
+            if (algoritmoActual === 'LRU') {
+                let minTiempo = Infinity;
+                for (let i = 0; i < memoriaPrincipal.length; i++) {
+                    const marco = memoriaPrincipal[i];
+                    if (marco && marco.ultimoAcceso < minTiempo) {
+                        minTiempo = marco.ultimoAcceso;
+                        paginaAReemplazar = marco;
+                        indiceMarcoAReemplazar = i;
+                    }
+                }
+            } else if (algoritmoActual === 'LFU') {
+                let minAccesos = Infinity;
+                for (let i = 0; i < memoriaPrincipal.length; i++) {
+                    const marco = memoriaPrincipal[i];
+                    if (marco && marco.accesos < minAccesos) {
+                        minAccesos = marco.accesos;
+                        paginaAReemplazar = marco;
+                        indiceMarcoAReemplazar = i;
+                    }
+                }
+                if (paginaAReemplazar) {
+                    const paginasConMinAccesos = [];
+                    for (let i = 0; i < memoriaPrincipal.length; i++) {
+                        const marco = memoriaPrincipal[i];
+                        if (marco && marco.accesos === minAccesos) {
+                            paginasConMinAccesos.push({ marco: marco, index: i });
+                        }
+                    }
+                    if (paginasConMinAccesos.length > 1) {
+                        let minTiempoDesempate = Infinity;
+                        let paginaDesempate = null;
+                        let indiceDesempate = -1;
+                        for (const p of paginasConMinAccesos) {
+                            if (p.marco.ultimoAcceso < minTiempoDesempate) {
+                                minTiempoDesempate = p.marco.ultimoAcceso;
+                                paginaDesempate = p.marco;
+                                indiceDesempate = p.index;
+                            }
+                        }
+                        paginaAReemplazar = paginaDesempate;
+                        indiceMarcoAReemplazar = indiceDesempate;
+                    }
+                }
+            }
+
+            if (paginaAReemplazar && indiceMarcoAReemplazar !== -1) {
+                agregarLog(`Reemplazando página ${paginaAReemplazar.idPagina} de Proceso ${paginaAReemplazar.idProceso} en marco ${indiceMarcoAReemplazar}.`, 'warning');
+                const bloqueLibre = memoriaSecundaria.indexOf(null);
+                if (bloqueLibre !== -1) {
+                    memoriaSecundaria[bloqueLibre] = {
+                        idProceso: paginaAReemplazar.idProceso,
+                        nombreProceso: paginaAReemplazar.nombreProceso,
+                        idPagina: paginaAReemplazar.idPagina
+                    };
+                    const procOriginal = procesos.find(p => p.id === paginaAReemplazar.idProceso);
+                    if (procOriginal) {
+                        const pagOriginal = procOriginal.tablaPaginas.find(p => p.idPagina === paginaAReemplazar.idPagina);
+                        if (pagOriginal) {
+                            pagOriginal.enMemoriaPrincipal = false;
+                            pagOriginal.marco = null;
+                            pagOriginal.bloque = bloqueLibre;
+                        }
+                    }
+                    agregarLog(`Página reemplazada movida a Memoria Secundaria, bloque ${bloqueLibre}.`, 'info');
+                } else {
+                    agregarLog(`Advertencia: No hay espacio en Memoria Secundaria para la página reemplazada. Se perderá.`, 'error');
+                    const procOriginal = procesos.find(p => p.id === paginaAReemplazar.idProceso);
+                    if (procOriginal) {
+                        const pagOriginal = procOriginal.tablaPaginas.find(p => p.idPagina === paginaAReemplazar.idPagina);
+                        if (pagOriginal) {
+                            pagOriginal.enMemoriaPrincipal = false;
+                            pagOriginal.marco = null;
+                            pagOriginal.bloque = null;
+                        }
+                    }
+                }
+
+                moverPaginaAMemoriaPrincipal(paginaNueva, indiceMarcoAReemplazar);
+                agregarLog(`Nueva página ${paginaNueva.idPagina} de Proceso ${paginaNueva.idProceso} movida a marco ${indiceMarcoAReemplazar} de MP.`, 'info');
+
+            } else {
+                agregarLog('Error: No se encontró una página para reemplazar. Esto no debería ocurrir si MP está llena.', 'error');
+            }
+        }
+
+        function generarDatosAleatorios(numProcesos) {
+            const minMP = 64;
+            const maxMP = 256;
+            const minMS = 128;
+            const maxMS = 512;
+            const minPagina = 4;
+            const maxPagina = 16;
+
+            let tamanoMemoriaPrincipal = Math.ceil(Math.random() * ((maxMP - minMP) / 16)) * 16 + minMP;
+            let tamanoMemoriaSecundaria = Math.ceil(Math.random() * ((maxMS - minMS) / 16)) * 16 + minMS;
+            let tamanoPagina = Math.ceil(Math.random() * ((maxPagina - minPagina) / 4)) * 4 + minPagina;
+
+            if (tamanoMemoriaPrincipal % tamanoPagina !== 0) {
+                tamanoMemoriaPrincipal = Math.ceil(tamanoMemoriaPrincipal / tamanoPagina) * tamanoPagina;
+            }
+            if (tamanoMemoriaSecundaria % tamanoPagina !== 0) {
+                tamanoMemoriaSecundaria = Math.ceil(tamanoMemoriaSecundaria / tamanoPagina) * tamanoPagina;
+            }
+
+            const procesosAleatorios = [];
+            for (let i = 0; i < numProcesos; i++) {
+                const nombre = `Proceso_Rand_${i + 1}`;
+                let tamanoProceso = Math.ceil(Math.random() * (128 / tamanoPagina)) * tamanoPagina;
+                if (tamanoProceso < tamanoPagina) tamanoProceso = tamanoPagina;
+                const pesoAcceso = Math.floor(Math.random() * 20) + 5;
+                procesosAleatorios.push({ nombre, tamanoKB: tamanoProceso, pesoAcceso });
+            }
+
+            return {
+                tamanoMemoriaPrincipal,
+                tamanoMemoriaSecundaria,
+                tamanoPagina,
+                procesos: procesosAleatorios
+            };
+        }
+
+        function simularAleatorioYComparar() {
+            if (!sistemaIniciado) {
+                agregarLog('El sistema no ha sido iniciado. Inicie el sistema primero.', 'error');
+                return;
+            }
+
+            const numProcesos = parseInt(document.getElementById('numProcesosAleatorios').value);
+            if (isNaN(numProcesos) || numProcesos <= 0) {
+                agregarLog('El número de procesos aleatorios debe ser un número positivo.', 'error');
+                return;
+            }
+
+            agregarLog('Iniciando simulación aleatoria y comparativa...', 'info');
+
+            datosSimulacionAleatoria = generarDatosAleatorios(numProcesos);
+
+            agregarLog('Ejecutando simulación con LRU...', 'info');
+            const resultadosLRU = ejecutarSimulacion(datosSimulacionAleatoria, 'LRU');
+            agregarLog('Simulación LRU completada.', 'success');
+
+            agregarLog('Ejecutando simulación con LFU...', 'info');
+            const resultadosLFU = ejecutarSimulacion(datosSimulacionAleatoria, 'LFU');
+            agregarLog('Simulación LFU completada.', 'success');
+
+            mostrarResultadosComparativos(resultadosLRU, resultadosLFU);
+            agregarLog('Comparación de simulaciones completada.', 'success');
+        }
+
+        function ejecutarSimulacion(datos, algoritmo) {
+            const estadoOriginal = {
+                memoriaPrincipal: JSON.parse(JSON.stringify(memoriaPrincipal)),
+                memoriaSecundaria: JSON.parse(JSON.stringify(memoriaSecundaria)),
+                procesos: JSON.parse(JSON.stringify(procesos)),
+                nextProcessId: nextProcessId,
+                tamanoPaginaKB: tamanoPaginaKB,
+                marcosMemoriaPrincipal: marcosMemoriaPrincipal,
+                bloquesMemoriaSecundaria: bloquesMemoriaSecundaria,
+                fallosPagina: fallosPagina,
+                aciertosPagina: aciertosPagina,
+                tiempoGlobal: tiempoGlobal,
+                algoritmoActual: algoritmoActual
+            };
+
+            memoriaPrincipal = Array(datos.tamanoMemoriaPrincipal / datos.tamanoPagina).fill(null);
+            memoriaSecundaria = Array(datos.tamanoMemoriaSecundaria / datos.tamanoPagina).fill(null);
+            procesos = [];
+            nextProcessId = 1;
+            tamanoPaginaKB = datos.tamanoPagina;
+            marcosMemoriaPrincipal = datos.tamanoMemoriaPrincipal / datos.tamanoPagina;
+            bloquesMemoriaSecundaria = datos.tamanoMemoriaSecundaria / datos.tamanoPagina;
+            fallosPagina = 0;
+            aciertosPagina = 0;
+            tiempoGlobal = 0;
+            algoritmoActual = algoritmo;
+
+            datos.procesos.forEach(p => {
+                const proceso = {
+                    id: nextProcessId++,
+                    nombre: p.nombre,
+                    tamanoKB: p.tamanoKB,
+                    paginas: Math.ceil(p.tamanoKB / tamanoPaginaKB),
+                    estado: 'Nuevo',
+                    accesos: 0,
+                    ultimoAcceso: 0,
+                    tablaPaginas: Array(Math.ceil(p.tamanoKB / tamanoPaginaKB)).fill().map((_, i) => ({
+                        idProceso: nextProcessId - 1,
+                        nombreProceso: p.nombre,
+                        idPagina: i,
+                        enMemoriaPrincipal: false,
+                        marco: null,
+                        bloque: null,
+                        accesos: 0,
+                        ultimoAcceso: 0
+                    }))
+                };
+                procesos.push(proceso);
+
+                let paginasEnPrincipal = 0;
+                for (let i = 0; i < proceso.tablaPaginas.length; i++) {
+                    const marcoLibre = memoriaPrincipal.indexOf(null);
+                    if (marcoLibre !== -1) {
+                        memoriaPrincipal[marcoLibre] = {
+                            idProceso: proceso.id,
+                            nombreProceso: proceso.nombre,
+                            idPagina: i,
+                            accesos: 0,
+                            ultimoAcceso: 0
+                        };
+                        proceso.tablaPaginas[i].enMemoriaPrincipal = true;
+                        proceso.tablaPaginas[i].marco = marcoLibre;
+                        paginasEnPrincipal++;
+                    } else {
+                        const bloqueLibre = memoriaSecundaria.indexOf(null);
+                        if (bloqueLibre !== -1) {
+                            memoriaSecundaria[bloqueLibre] = {
+                                idProceso: proceso.id,
+                                nombreProceso: proceso.nombre,
+                                idPagina: i
+                            };
+                            proceso.tablaPaginas[i].bloque = bloqueLibre;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                if (paginasEnPrincipal >= Math.ceil(proceso.paginas / 2)) {
+                    proceso.estado = 'Activo';
+                } else if (paginasEnPrincipal > 0) {
+                    proceso.estado = 'Listo';
+                } else {
+                    proceso.estado = 'Suspendido/Listo';
+                }
+            });
+
+            const totalAccesos = datos.procesos.reduce((sum, p) => sum + p.pesoAcceso, 0);
+            for (let i = 0; i < totalAccesos; i++) {
+                let rand = Math.random() * totalAccesos;
+                let procesoSeleccionado = null;
+                for (const p of datos.procesos) {
+                    rand -= p.pesoAcceso;
+                    if (rand <= 0) {
+                        procesoSeleccionado = procesos.find(proc => proc.nombre === p.nombre);
+                        break;
+                    }
+                }
+
+                if (procesoSeleccionado && procesoSeleccionado.tablaPaginas.length > 0) {
+                    const paginaAleatoriaIndex = Math.floor(Math.random() * procesoSeleccionado.tablaPaginas.length);
+                    const paginaAccedida = procesoSeleccionado.tablaPaginas[paginaAleatoriaIndex];
+
+                    tiempoGlobal++;
+                    procesoSeleccionado.accesos++;
+                    procesoSeleccionado.ultimoAcceso = tiempoGlobal;
+                    paginaAccedida.accesos++;
+                    paginaAccedida.ultimoAcceso = tiempoGlobal;
+
+                    if (paginaAccedida.enMemoriaPrincipal) {
+                        aciertosPagina++;
+                        const marcoEnMP = memoriaPrincipal[paginaAccedida.marco];
+                        if (marcoEnMP) {
+                            marcoEnMP.ultimoAcceso = tiempoGlobal;
+                            marcoEnMP.accesos++;
+                        }
+                    } else {
+                        fallosPagina++;
+                        let marcoLibre = memoriaPrincipal.indexOf(null);
+                        if (marcoLibre !== -1) {
+                            moverPaginaAMemoriaPrincipal(paginaAccedida, marcoLibre);
+                        } else {
+                            reemplazarPagina(paginaAccedida);
+                        }
+                    }
+                }
+            }
+
+            const resultados = {
+                fallosPagina: fallosPagina,
+                aciertosPagina: aciertosPagina,
+                procesosInfo: procesos.map(p => {
+                    const paginasEnMP = p.tablaPaginas.filter(pg => pg.enMemoriaPrincipal).length;
+                    return {
+                        nombre: p.nombre,
+                        paginasEnMP: paginasEnMP,
+                        accesosTotal: p.accesos,
+                        fallosProceso: p.tablaPaginas.filter(pg => !pg.enMemoriaPrincipal).length
+                    };
+                })
+            };
+
+            memoriaPrincipal = estadoOriginal.memoriaPrincipal;
+            memoriaSecundaria = estadoOriginal.memoriaSecundaria;
+            procesos = estadoOriginal.procesos;
+            nextProcessId = estadoOriginal.nextProcessId;
+            tamanoPaginaKB = estadoOriginal.tamanoPaginaKB;
+            marcosMemoriaPrincipal = estadoOriginal.marcosMemoriaPrincipal;
+            bloquesMemoriaSecundaria = estadoOriginal.bloquesMemoriaSecundaria;
+            fallosPagina = estadoOriginal.fallosPagina;
+            aciertosPagina = estadoOriginal.aciertosPagina;
+            tiempoGlobal = estadoOriginal.tiempoGlobal;
+            algoritmoActual = estadoOriginal.algoritmoActual;
+
+            return resultados;
+        }
+
+        function mostrarResultadosComparativos(resultadosLRU, resultadosLFU) {
+            const tablaLRUBody = document.getElementById('tablaResultadosLRU').querySelector('tbody');
+            const tablaLFUBody = document.getElementById('tablaResultadosLFU').querySelector('tbody');
+
+            tablaLRUBody.innerHTML = '';
+            tablaLFUBody.innerHTML = '';
+
+            resultadosLRU.procesosInfo.forEach(p => {
+                const row = tablaLRUBody.insertRow();
+                row.insertCell().textContent = p.nombre;
+                row.insertCell().textContent = p.paginasEnMP;
+                row.insertCell().textContent = p.accesosTotal;
+                row.insertCell().textContent = resultadosLRU.fallosPagina;
+                row.insertCell().textContent = resultadosLRU.aciertosPagina;
+            });
+
+            resultadosLFU.procesosInfo.forEach(p => {
+                const row = tablaLFUBody.insertRow();
+                row.insertCell().textContent = p.nombre;
+                row.insertCell().textContent = p.paginasEnMP;
+                row.insertCell().textContent = p.accesosTotal;
+                row.insertCell().textContent = resultadosLFU.fallosPagina;
+                row.insertCell().textContent = resultadosLFU.aciertosPagina;
+            });
+
+            resultadosComparativosDiv.style.display = 'block';
+            if (mensajeNoResultadosP) {
+                mensajeNoResultadosP.style.display = 'none';
+            }
+
+            actualizarUICompleta();
+        }
+
+
+        function actualizarVisualizacionMemoria() {
+            const visMP = document.getElementById('visualizacionMemoriaPrincipal');
+            const visMS = document.getElementById('visualizacionMemoriaSecundaria');
+
+            visMP.innerHTML = '';
+            memoriaPrincipal.forEach((marco, index) => {
+                const block = document.createElement('div');
+                block.className = 'memory-block';
+                if (marco) {
+                    block.style.backgroundColor = getColorForProcess(marco.idProceso);
+                    block.title = `P${marco.idProceso} - Pag ${marco.idPagina}\nAccesos: ${marco.accesos}\nÚltimo Acceso: ${marco.ultimoAcceso}`;
+                    block.innerHTML = `P${marco.idProceso}<br>Pag ${marco.idPagina}`;
+                } else {
+                    block.className += ' empty';
+                    block.title = `Marco ${index} - Vacío`;
+                    block.textContent = index;
+                }
+                visMP.appendChild(block);
+            });
+
+            visMS.innerHTML = '';
+            memoriaSecundaria.forEach((bloque, index) => {
+                const block = document.createElement('div');
+                block.className = 'memory-block';
+                if (bloque) {
+                    block.style.backgroundColor = getColorForProcess(bloque.idProceso);
+                    block.title = `P${bloque.idProceso} - Pag ${bloque.idPagina}`;
+                    block.innerHTML = `P${bloque.idProceso}<br>Pag ${bloque.idPagina}`;
+                } else {
+                    block.className += ' empty';
+                    block.title = `Bloque ${index} - Vacío`;
+                    block.textContent = index;
+                }
+                visMS.appendChild(block);
+            });
+        }
+
+        function actualizarTablaProcesos() {
+            const tablaProcesosBody = document.getElementById('tablaProcesos').querySelector('tbody');
+            tablaProcesosBody.innerHTML = '';
+
+            procesos.forEach(proceso => {
+                const row = tablaProcesosBody.insertRow();
+                row.insertCell().textContent = proceso.id;
+                row.insertCell().textContent = proceso.nombre;
+                row.insertCell().textContent = proceso.tamanoKB;
+                row.insertCell().textContent = proceso.paginas;
+                row.insertCell().textContent = proceso.estado;
+                row.insertCell().textContent = proceso.accesos;
+                row.insertCell().textContent = proceso.ultimoAcceso;
+            });
+        }
+
+        function actualizarEstadisticas() {
+            document.getElementById('statMarcosMPLibres').textContent = memoriaPrincipal.filter(m => m === null).length;
+            document.getElementById('statBloquesMSLibres').textContent = memoriaSecundaria.filter(b => b === null).length;
+            document.getElementById('statFallosPagina').textContent = fallosPagina;
+            document.getElementById('statAciertosPagina').textContent = aciertosPagina;
+        }
+
+        function agregarLog(mensaje, tipo = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${tipo}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${mensaje}`;
+            registroEventos.prepend(entry);
+            if (registroEventos.children.length > 100) {
+                registroEventos.removeChild(registroEventos.lastChild);
+            }
+        }
+
+        function actualizarUICompleta() {
+            actualizarVisualizacionMemoria();
+            actualizarTablaProcesos();
+            actualizarEstadisticas();
+        }
+
+        const processColors = {};
+        function getColorForProcess(idProceso) {
+            if (!processColors[idProceso]) {
+                const hue = (idProceso * 137.508) % 360;
+                processColors[idProceso] = `hsl(${hue}, 70%, 60%)`;
+            }
+            return processColors[idProceso];
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            btnLRU.classList.add('active');
+            actualizarUICompleta();
+        });
+
+    </script>
+</body>
+</html>
